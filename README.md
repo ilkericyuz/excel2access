@@ -54,9 +54,19 @@ Example of selecting data from database:
     ' 5   text-5      Yes           50
     
 
-Get names of all tables in a database file ina  collection:
+You can also execute your own query
+
+    ExecuteSql(theSql As String)
+    
+
+Get names of all tables in a database file in a  collection:
 
     GetTableNames() As Collection
+
+
+Insert records:
+    
+    InsertRecord(theTable As String, theSetFields As Collection, theSetValues As Collection)
 
 
 Insert a single record:
@@ -86,18 +96,58 @@ Get multiple (or all) values in a single field:
         Optional theOrderBy As String = "", Optional theAsc As Boolean = False, _
         Optional isBlankIncluded As Boolean = True) As Collection
     
-   
-Insert records:
-    
-    InsertRecord(theTable As String, theSetFields As Collection, theSetValues As Collection)
-    
     
 Update records:
 
-    ' SetFieldNames, setValues, criteriaFieldNames and criteriaValues are Collection objects
-    Call db.UpdateRecords("Table Name", [setFieldNames], [setValues], [criteriaFieldNames], [criteriaValues]
-    
-    
-Select values in a single field:
+    UpdateRecords(theTable As String, _
+        theSetFields As Collection, _
+        theSetValues As Collection, _
+        theCriteriaFields As Collection, _
+        theCriteriaValues As Collection, _
+        Optional theOperators As Collection)
+        
+        
+Select a single cell in a field
 
-    Call db.SelectField("Table Name", [selectionField], [
+     SelectFieldCell(theTable As String, _
+        theSelectionField As String, _
+        theCriteriaFields As Collection, _
+        theCriteriaValues As Collection, _
+        Optional theOperators As Collection, _
+        Optional theOrderBy As String = "", _
+        Optional theAscending As Boolean) As Variant
+        
+        
+Get sum of the cells of a number field according to criteria
+
+    SelectFieldSum(theTable As String, _
+        theSelectionField As String, _
+        theCriteriaFields As Collection, _
+        theCriteriaValues As Collection, _
+        Optional theOperators As Collection, _
+        Optional theLimitBy As Double = 0, _
+        Optional theOrderByFieldName As String = "", _
+        Optional theAscending As Boolean) As Double
+        
+    
+Get count of the cells of a number field according to criteria
+
+    SelectFieldCount(theTable As String, _
+        theSelectionField As String, _
+        theCriteriaFields As Collection, _
+        theCriteriaValues As Collection, _
+        Optional theOperators As Collection, _
+        Optional theLimitBy As Double = 0, _
+        Optional theOrderByFieldName As String = "", _
+        Optional theAscending As Boolean) As Double
+        
+        
+Delete records
+
+    DeleteRecords(theTable As String, _
+        theCriteriaFields As Collection, _
+        theCriteriaValues As Collection, _
+        Optional theOperators As Collection)
+        
+        
+        
