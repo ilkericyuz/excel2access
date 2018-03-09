@@ -56,7 +56,7 @@ Example of selecting data from database:
 
 You can also execute your own query
 
-    ExecuteSql(theSql As String)
+    ExecuteSql(theSql As String) as ADODB.Recordset
     
 
 Get names of all tables in a database file in a  collection:
