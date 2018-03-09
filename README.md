@@ -2,7 +2,7 @@
 A Microsoft Excel class module which lets you to connect and manipulate Microsoft Access databases.
 
 You can interact with a MS Access database without any MS SQL knowledge. 
-DatabaseUtility class generates SQL inside of it and executes is for you.
+DatabaseUtility class generates SQL inside of it and executes it for you.
     
 Example of selecting data from database:
 
