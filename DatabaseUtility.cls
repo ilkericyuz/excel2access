@@ -150,7 +150,7 @@ End Sub
 ' ==================================================
 ' INTERFACE FUNCTIONS
 ' ==================================================
-Public Sub ExecuteSql(theSql As String)
+Public Sub ExecuteSql(theSql As String) as ADODB.Recordset
     ''' Executes sql on connected database.
     ''' If sql fetches records, they are saved into ADODB.Recordset (rs).
     ''' If sql changes records in database, number of affected rows can be acquired from recordsAffected.
@@ -174,6 +174,8 @@ Public Sub ExecuteSql(theSql As String)
     ' executes the sql and number of affected rows are given to recordsAffected
     Set rs = cmd.Execute(pRecordsAffected)
 
+    Set ExecuteSQL = rs
+                                
 End Sub
 
 
