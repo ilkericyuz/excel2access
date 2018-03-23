@@ -1121,13 +1121,13 @@ Private Function FixCriteriaDate(theDateString) As String
     End If
 
     If InStr(theDateString, ".") > 0 Then
-        resultString = Split(theDateString, "/")
-    ElseIf InStr(theDateString, "/") > 0 Then
         resultString = Split(theDateString, ".")
+    ElseIf InStr(theDateString, "/") > 0 Then
+        resultString = Split(theDateString, "/")
     End If
 
     FixCriteriaDate = "#" & resultString(2) & "-" & resultString(1) & "-" & resultString(0) & "#"
-
+ 
 End Function
 
 
