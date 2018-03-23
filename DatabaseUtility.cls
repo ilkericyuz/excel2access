@@ -87,7 +87,7 @@ End Property
 ' ==================================================
 ' INITIALIZE AND TERMINATE
 ' ==================================================
-Private Sub class_initialize()
+Private Sub Class_Initialize()
     ''' Sets DataAccessClass object, its command and connection
         
     Set DAC = New DataAccessClass
@@ -150,7 +150,7 @@ End Sub
 ' ==================================================
 ' INTERFACE FUNCTIONS
 ' ==================================================
-Public Sub ExecuteSql(theSql As String) as ADODB.Recordset
+Function ExecuteSql(theSql As String) As ADODB.Recordset
     ''' Executes sql on connected database.
     ''' If sql fetches records, they are saved into ADODB.Recordset (rs).
     ''' If sql changes records in database, number of affected rows can be acquired from recordsAffected.
@@ -173,10 +173,10 @@ Public Sub ExecuteSql(theSql As String) as ADODB.Recordset
     
     ' executes the sql and number of affected rows are given to recordsAffected
     Set rs = cmd.Execute(pRecordsAffected)
+    
+    Set ExecuteSql = rs
 
-    Set ExecuteSQL = rs
-                                
-End Sub
+End Function
 
 
 Function GetTableNames() As Collection
@@ -198,8 +198,8 @@ Function GetTableNames() As Collection
     
     With rs
         Do While Not .EOF
-            If .fields("TABLE_TYPE") <> "VIEW" Then
-               tableNames.Add .fields("TABLE_NAME").Value
+            If .Fields("TABLE_TYPE") <> "VIEW" Then
+               tableNames.Add .Fields("TABLE_NAME").Value
             End If
             .MoveNext
         Loop
@@ -330,13 +330,13 @@ Function SelectField(theTable As String, _
         
         If isBlankIncluded Then
             Do Until rs.EOF
-                results.Add rs.fields(0).Value
+                results.Add rs.Fields(0).Value
                 rs.MoveNext
             Loop
         Else
             Do Until rs.EOF
-                If Not IsNull(rs.fields(0)) And rs.fields(0) <> "" And rs.fields(0) <> 0 Then
-                    results.Add rs.fields(0).Value
+                If Not IsNull(rs.Fields(0)) And rs.Fields(0) <> "" And rs.Fields(0) <> 0 Then
+                    results.Add rs.Fields(0).Value
                 End If
                 rs.MoveNext
             Loop
@@ -424,7 +424,7 @@ Function SelectFieldCell(theTable As String, _
 '    ElseIf IsNull(rs.Fields(0).Value) Then
 '        cellValue = ""
     Else
-        cellValue = rs.fields(0).Value
+        cellValue = rs.Fields(0).Value
     End If
     
     SelectFieldCell = cellValue
@@ -478,10 +478,10 @@ Function SelectFieldSum(theTable As String, _
 
     If rs.EOF = True Then
         sumValue = 0
-    ElseIf rs.fields(0) = Null Then
+    ElseIf rs.Fields(0) = Null Then
         sumValue = 0
     Else
-        sumValue = rs.fields(0).Value
+        sumValue = rs.Fields(0).Value
     End If
     
     SelectFieldSum = sumValue
@@ -535,10 +535,10 @@ Function SelectFieldCount(theTable As String, _
 
     If rs.EOF = True Then
         countValue = 0
-    ElseIf rs.fields(0) = Null Then
+    ElseIf rs.Fields(0) = Null Then
         countValue = 0
     Else
-        countValue = rs.fields(0).Value
+        countValue = rs.Fields(0).Value
     End If
     
     SelectFieldCount = countValue
@@ -1107,18 +1107,27 @@ Private Function FixCriteriaDate(theDateString) As String
     '''
     ''' @output:
     '''     FixCriteriaDate:    String of date in "#yyyy-mm-dd#" format.
-    
+
     Dim resultString() As String, _
         result As String
-        
-    If InStr(theDateString, "/") > 0 Then
+
+    ' If date is a number, convert it to date string
+    If VarType(theDateString) = vbLong _
+            Or VarType(theDateString) = vbDecimal _
+            Or VarType(theDateString) = vbDouble _
+            Or VarType(theDateString) = vbInteger _
+            Or VarType(theDateString) = vbLongLong Then
+        theDateString = Format(theDateString, "dd.mm.yyyy")
+    End If
+
+    If InStr(theDateString, ".") > 0 Then
         resultString = Split(theDateString, "/")
-    ElseIf InStr(theDateString, ".") > 0 Then
+    ElseIf InStr(theDateString, "/") > 0 Then
         resultString = Split(theDateString, ".")
     End If
-        
+
     FixCriteriaDate = "#" & resultString(2) & "-" & resultString(1) & "-" & resultString(0) & "#"
-    
+
 End Function
 
 
@@ -1167,9 +1176,9 @@ Function GetFieldNames(Optional theTable As String = "") As Collection
     
     Set rs = cmd.Execute '("SELECT CustomerName FROM LoanTable WHERE RiskNumber=4204676036780;")
 
-    For i = 0 To rs.fields.Count - 1
+    For i = 0 To rs.Fields.Count - 1
     
-        fieldNames.Add rs.fields(i).Name
+        fieldNames.Add rs.Fields(i).Name
     
     Next i
 
@@ -1200,7 +1209,7 @@ Function GetFieldDataType(theTable As String, theField As String) As Double
     
     Set rs = cmd.Execute
 
-    GetFieldDataType = Int(rs.fields(0).Type)
+    GetFieldDataType = Int(rs.Fields(0).Type)
 
 End Function
 
